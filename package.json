@@ -1,0 +1,26 @@
+{
+  "name": "@zachleat/filter-container",
+  "version": "1.0.0",
+  "description": "Filtering visible child elements based on form field values.",
+  "main": "filter-container.js",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zachleat/filter-container.git"
+  },
+  "author": {
+    "name": "Zach Leatherman",
+    "email": "zachleatherman@gmail.com",
+    "url": "https://zachleat.com/"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zachleat/filter-container/issues"
+  },
+  "homepage": "https://github.com/zachleat/filter-container#readme"
+}
