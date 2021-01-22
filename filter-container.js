@@ -104,13 +104,25 @@ class FilterContainer extends HTMLElement {
     return true;
   }
 
+  getLabels() {
+    if(this.results) {
+      let attrValue = this.results.getAttribute(this.attrs.results);
+      let split = attrValue.split("/");
+      if(split.length === 2) {
+        return split;
+      }
+    }
+    return ["Result", "Results"];
+  }
+
   renderResultCount() {
     if(this.results) {
       let count = Array.from(this.getAllFilterableElements())
-        .filter(entry => this.elementIsVisible(entry))
+      .filter(entry => this.elementIsVisible(entry))
         .length;
-  
-      this.results.innerHTML = `${count} Result${count !== 1 ? "s" : ""}`;
+
+      let labels = this.getLabels();
+      this.results.innerHTML = `${count} ${count !== 1 ? labels[1] : labels[0]}`;
     }
   }
 }

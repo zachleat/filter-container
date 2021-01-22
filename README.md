@@ -30,12 +30,9 @@ Please see the demo for sample code. Use:
 ### Optional Features
 
 * Add the `data-filter-results` attribute to any child element of the component if you’d like us to populate it with the number of results.
+  * Add a string to this attribute value to customize your Results labels (delimited by `/`). e.g. `data-filter-results="Country/Countries"`
 * Use `<select data-filter-delimiter=",">` if your content elements may have more than one filter value assigned (in this example delimited by a comma).
   * For example, Egypt is in both Africa and Asia: `<li data-filter-continent="africa,asia">Egypt</li>`
-
-## TODO
-
-* Option to Internationalize `1 Result` `2 Results` strings
 
 ## Credits
 
