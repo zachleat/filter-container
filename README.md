@@ -20,7 +20,7 @@ Please see the demo for sample code. Use:
 * Make sure to add the CSS for each `KEY_NAME`. You can prepopulate the server-rendered content using this too if you’d like (maybe your page has a server-rendered filter applied).
 
 ```css
-.filter-continent--KEY_NAME {
+.filter-KEY_NAME--hide {
   display: none;
 }
 ```
