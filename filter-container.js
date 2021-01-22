@@ -140,6 +140,7 @@ class FilterContainer extends HTMLElement {
     };
 
     if(this.results.hasAttribute("aria-live")) {
+      // This timeout helped VoiceOver
       clearTimeout(this.timeout);
       this.timeout = setTimeout(fn, 250);
     } else {
