@@ -18,13 +18,14 @@ Please see the demo for sample code. Use:
 * `<option value="ENTRY_VALUE">` for every filter category.
 * Add a `data-filter-KEY_NAME="ENTRY_VALUE"` attribute to any child element to assign both a filter key and category to match on.
 * Make sure to add the CSS for each `KEY_NAME`. You can prepopulate the server-rendered content using this too if you’d like (maybe your page has a server-rendered filter applied).
-* Important: This component does not filter on initialization. The form field needs to change for filtering to take place.
 
 ```css
 .filter-continent--KEY_NAME {
   display: none;
 }
 ```
+
+* Important: This component does not filter on initialization. The form field needs to change for filtering to take place.
 
 ## Optional Features
 
