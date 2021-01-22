@@ -8,10 +8,12 @@
 		<style>
 		/* Progressively enhance the JS-only form */
 		.demo-filter-form {
-			visibility: hidden;
+			opacity: .5;
+			pointer-events: none;
 		}
 		.filter-container--js .demo-filter-form {
-			visibility: visible;
+			opacity: 1;
+			pointer-events: auto;
 		}
 
 		/* Hide entries */
@@ -25,7 +27,6 @@
 		<p>Go back to the <a href="https://github.com/zachleat/filter-container/">repository on GitHub</a>.</p>
 		<filter-container>
 			<form class="demo-filter-form">
-				<span data-filter-results></span>
 				<label>
 					Filter by Continent:
 					<select data-filter-bind="continent" data-filter-delimiter=",">
@@ -39,6 +40,7 @@
 						<option value="north-america">North America</option>
 					</select>
 				</label>
+				<span data-filter-results></span>
 			</form>
 			<ul>
 				<li data-filter-continent="asia">Afghanistan</li>
