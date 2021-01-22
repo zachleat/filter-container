@@ -3,6 +3,7 @@ class FilterContainer extends HTMLElement {
     super();
     this.attrs = {
       bind: "data-filter-bind",
+      oninit: "data-oninit",
       delimiter: "data-filter-delimiter",
       results: "data-filter-results",
     };
@@ -18,7 +19,10 @@ class FilterContainer extends HTMLElement {
     this.results = this.querySelector(`[${this.attrs.results}]`);
     let formElements = this.getAllFormElements();
     this.bindEvents(formElements);
-    this.filterAll(formElements);
+
+    if(this.hasAttribute(this.attrs.oninit)) {
+      this.filterAll(formElements);
+    }
   }
   
   getAllFormElements() {
