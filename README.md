@@ -27,7 +27,7 @@ Please see the demo for sample code. Use:
 
 * Important: This component does not filter on initialization. The form field needs to change for filtering to take place.
 
-## Optional Features
+### Optional Features
 
 * Add the `data-filter-results` attribute to any child element of the component if you’d like us to populate it with the number of results.
 * Use `<select data-filter-delimiter=",">` if your content elements may have more than one filter value assigned (in this example delimited by a comma).
