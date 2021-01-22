@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="description" content="">
+		<title>filter-container Demo</title>
+		<style>
+		/* Progressively enhance the JS-only form */
+		.demo-filter-form {
+			visibility: hidden;
+		}
+		.filter-container--js .demo-filter-form {
+			visibility: visible;
+		}
+
+		/* Hide entries */
+		.filter-continent--hide {
+			display: none;
+		}
+		</style>
+	</head>
+	<body>
+		<h1><code>filter-container</code> Web Component Demo</h1>
+		<p>Go back to the <a href="https://github.com/zachleat/filter-container/">repository on GitHub</a>.</p>
+		<filter-container>
+			<form class="demo-filter-form">
+				<span data-filter-results></span>
+				<label>
+					Filter by Continent:
+					<select data-filter-bind="continent" data-filter-delimiter=",">
+						<option value="">All Continents</option>
+						<option value="africa">Africa</option>
+						<option value="antarctica">Antarctica</option>
+						<option value="australia">Australia</option>
+						<option value="asia">Asia</option>
+						<option value="europe">Europe</option>
+						<option value="south-america">South America</option>
+						<option value="north-america">North America</option>
+					</select>
+				</label>
+			</form>
+			<ul>
+				<li data-filter-continent="asia">Afghanistan</li>
+				<li data-filter-continent="europe">Albania</li>
+				<li data-filter-continent="africa">Algeria</li>
+				<li data-filter-continent="south-america">Argentina</li>
+				<li data-filter-continent="australia">Australia</li>
+				<li data-filter-continent="asia">Bangladesh</li>
+				<li data-filter-continent="europe">Belgium</li>
+				<li data-filter-continent="europe">Belarus</li>
+				<li data-filter-continent="south-america">Brazil</li>
+				<li data-filter-continent="africa">Camaroon</li>
+				<li data-filter-continent="north-america">Canada</li>
+				<li data-filter-continent="asia">China</li>
+				<li data-filter-continent="south-america">Columbia</li>
+				<li data-filter-continent="europe">Denmark</li>
+				<li data-filter-continent="africa,asia">Egypt</li>
+				<li data-filter-continent="africa">Ethiopia</li>
+				<li data-filter-continent="europe">France</li>
+				<li data-filter-continent="europe">Germany</li>
+				<li data-filter-continent="africa">Ghana</li>
+				<li data-filter-continent="asia">Hong Kong</li>
+				<li data-filter-continent="asia">India</li>
+				<li data-filter-continent="asia">Indonesia</li>
+				<li data-filter-continent="europe">Ireland</li>
+				<li data-filter-continent="africa">Ivory Coast</li>
+				<li data-filter-continent="europe">Italy</li>
+				<li data-filter-continent="asia">Japan</li>
+				<li data-filter-continent="africa">Madagascar</li>
+				<li data-filter-continent="north-america">Mexico</li>
+				<li data-filter-continent="africa">Nigeria</li>
+				<li data-filter-continent="asia">Palestine</li>
+				<li data-filter-continent="south-america">Panama</li>
+				<li data-filter-continent="australia">Papau New Guinea</li>
+				<li data-filter-continent="asia">Philippines</li>
+				<li data-filter-continent="europe">Portugal</li>
+				<li data-filter-continent="asia,europe">Russia</li>
+				<li data-filter-continent="asia">South Korea</li>
+				<li data-filter-continent="europe">Spain</li>
+				<li data-filter-continent="asia">Taiwan</li>
+				<li data-filter-continent="europe">United Kingdom</li>
+				<li data-filter-continent="north-america">United States</li>
+				<li data-filter-continent="africa">Zimbabwe</li>
+			</ul>
+			<p>Sorry if your country is missing, I typed this out by hand 😅</p>
+		</filter-container>
+		<script type="module" src="filter-container.js"></script>
+	</body>
+</html>
