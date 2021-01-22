@@ -4,6 +4,7 @@ A themeless web component to filter visible child elements based on form field v
 
 * [Demo](https://zachleat.github.io/filter-container/demo.html)
 * [Demo on jamstack.org](https://jamstack.org/generators/) (Filter by Language, Template, or License)
+* [Demo on zachleat.com](https://www.zachleat.com/web/) (Filter by blog post category)
 
 ## Installation
 
