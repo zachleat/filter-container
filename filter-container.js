@@ -125,7 +125,11 @@ class FilterContainer extends HTMLElement {
   }
 
   renderResultCount() {
-    if(this.results) {
+    if(!this.results) {
+      return;
+    }
+
+    let fn = () => {
       let count = Array.from(this.getAllFilterableElements())
       .filter(entry => this.elementIsVisible(entry))
       .filter(entry => !this.elementIsExcluded(entry))
@@ -133,6 +137,13 @@ class FilterContainer extends HTMLElement {
 
       let labels = this.getLabels();
       this.results.innerHTML = `${count} ${count !== 1 ? labels[1] : labels[0]}`;
+    };
+
+    if(this.results.hasAttribute("aria-live")) {
+      clearTimeout(this.timeout);
+      this.timeout = setTimeout(fn, 250);
+    } else {
+      fn();
     }
   }
 }
