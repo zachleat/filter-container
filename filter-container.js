@@ -6,6 +6,7 @@ class FilterContainer extends HTMLElement {
       oninit: "data-oninit",
       delimiter: "data-filter-delimiter",
       results: "data-filter-results",
+      resultsExclude: "data-filter-results-exclude",
     };
     this.classes = {
       enhanced: "filter-container--js",
@@ -108,6 +109,10 @@ class FilterContainer extends HTMLElement {
     return true;
   }
 
+  elementIsExcluded(element) {
+    return element.hasAttribute(this.attrs.resultsExclude);
+  }
+
   getLabels() {
     if(this.results) {
       let attrValue = this.results.getAttribute(this.attrs.results);
@@ -123,6 +128,7 @@ class FilterContainer extends HTMLElement {
     if(this.results) {
       let count = Array.from(this.getAllFilterableElements())
       .filter(entry => this.elementIsVisible(entry))
+      .filter(entry => !this.elementIsExcluded(entry))
         .length;
 
       let labels = this.getLabels();
