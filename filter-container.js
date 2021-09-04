@@ -7,6 +7,7 @@ class FilterContainer extends HTMLElement {
       delimiter: "data-filter-delimiter",
       results: "data-filter-results",
       resultsExclude: "data-filter-results-exclude",
+      skipUrlUpdate: "data-filter-skip-url",
     };
     this.classes = {
       enhanced: "filter-container--js",
@@ -22,7 +23,7 @@ class FilterContainer extends HTMLElement {
     this.bindEvents(formElements);
 
     if(this.hasAttribute(this.attrs.oninit)) {
-      this.filterAll(formElements);
+      this.filterAll(formElements, true);
     }
   }
   
@@ -61,18 +62,56 @@ class FilterContainer extends HTMLElement {
     }
   }
 
-  filterAll(formElements) {
+  filterAll(formElements, isOnload = false) {
     for(let el of formElements) {
+      if(isOnload) {
+        let urlParamValue = this.getCurrentUrlFilterValue(el);
+        if(urlParamValue) {
+          el.value = urlParamValue;
+        }
+      }
+
       this.filter(el);
     }
     this.renderResultCount();
   }
 
+  getCurrentUrlFilterValue(formElement) {
+    let params = new URLSearchParams(window.location.search);
+    return params.get(this.getKey(formElement));
+  }
+
+  updateUrl(key, value) {
+    if(!this.baseUrl) {
+      this.baseUrl = window.location.pathname;
+    }
+
+    let params = new URLSearchParams(window.location.search);
+    if(params.get(key) !== value) {
+      if(!value) {
+        params.delete(key);
+      } else {
+        params.set(key, value);
+      }
+
+      history.pushState({}, '', `${this.baseUrl}${params.toString().length > 0 ? `?${params}`: ""}` );
+    }
+  }
+
+  getKey(formElement) {
+    return formElement.getAttribute(this.attrs.bind);
+  }
+
   filter(formElement) {
-    let key = formElement.getAttribute(this.attrs.bind);
+    let key = this.getKey(formElement);
     let delimiter = formElement.getAttribute(this.attrs.delimiter);
 
     let value = formElement.value;
+
+    if(!formElement.hasAttribute(this.attrs.skipUrlUpdate)) {
+      this.updateUrl(key, value);
+    }
+
     let elementsSelectorAttr = this.getElementSelector(key);
     let elements = this.querySelectorAll(`[${elementsSelectorAttr}]`);
     let cls = `filter-${key}--hide`;
