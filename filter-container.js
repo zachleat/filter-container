@@ -76,8 +76,15 @@ class FilterContainer extends HTMLElement {
     this.renderResultCount();
   }
 
+  getSearchValue() {
+    if(window.location.search.startsWith("?")) {
+      return window.location.search.substr(1);
+    }
+    return window.location.search;
+  }
+
   getCurrentUrlFilterValue(formElement) {
-    let params = new URLSearchParams(window.location.search);
+    let params = new URLSearchParams(this.getSearchValue());
     return params.get(this.getKey(formElement));
   }
 
@@ -86,7 +93,7 @@ class FilterContainer extends HTMLElement {
       this.baseUrl = window.location.pathname;
     }
 
-    let params = new URLSearchParams(window.location.search);
+    let params = new URLSearchParams(this.getSearchValue());
     if(params.get(key) !== value) {
       if(!value) {
         params.delete(key);
