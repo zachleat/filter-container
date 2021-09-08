@@ -23,7 +23,12 @@ class FilterContainer extends HTMLElement {
     this.bindEvents(formElements);
 
     if(this.hasAttribute(this.attrs.oninit)) {
-      this.filterAll(formElements, true);
+      // This timeout was necessary to fix a bug with Google Chrome 93
+      // Navigate to a filterable page, navigate away, use the back button to return
+      // (connectedCallback would filter before the DOM was ready)
+      window.setTimeout(() => {
+        this.filterAll(formElements, true);
+      }, 0);
     }
   }
   
@@ -53,7 +58,7 @@ class FilterContainer extends HTMLElement {
 
   bindEvents(formElements) {
     for(let el of formElements) {
-      el.addEventListener("change", e => {
+      el.addEventListener("input", e => {
         this.filter(e.target);
         requestAnimationFrame(() => {
           this.renderResultCount();
