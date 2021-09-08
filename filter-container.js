@@ -101,7 +101,7 @@ class FilterContainer extends HTMLElement {
         params.set(key, value);
       }
 
-      history.pushState({}, '', `${this.baseUrl}${params.toString().length > 0 ? `?${params}`: ""}` );
+      history.replaceState({}, '', `${this.baseUrl}${params.toString().length > 0 ? `?${params}`: ""}` );
     }
   }
 
