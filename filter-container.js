@@ -4,10 +4,10 @@ class FilterContainer extends HTMLElement {
     this.attrs = {
       oninit: "oninit",
       valueDelimiter: "delimiter",
-      bind: "data-filter-bind",
-      results: "data-filter-results",
+      leaveUrlAlone: "leave-url-alone",
+      bind: "data-filter-key",
+      results: "data-filter-labels",
       resultsExclude: "data-filter-results-exclude",
-      skipUrlUpdate: "data-filter-skip-url",
     };
     this.classes = {
       enhanced: "filter-container--js",
@@ -52,7 +52,6 @@ class FilterContainer extends HTMLElement {
     if(!this._lookedFor.formElements) {
       let selector = `:scope [${this.attrs.bind}]`;
       let results = {};
-      console.log( "> formElements QUERYSELECTOR", selector );
       for(let node of this.querySelectorAll(selector)) {
         let attr = node.getAttribute(this.attrs.bind);
         if(!results[attr]) {
@@ -120,15 +119,13 @@ class FilterContainer extends HTMLElement {
       }
     }
 
-    // TODO update URL
-    // if(!formElement.hasAttribute(this.attrs.skipUrlUpdate)) {
-      //   this.updateUrl(key, value);
-    // }
+    if(!this.hasAttribute(this.attrs.leaveUrlAlone)) {
+      this.updateUrl(key, values);
+    }
 
     let elementsSelectorAttr = this.getElementSelector(key);
     let selector = `:scope [${elementsSelectorAttr}]`;
     let elements = this.querySelectorAll(selector);
-    console.log( "> _getMap QUERYSELECTOR", selector );
 
     let map = new Map();
     for(let element of Array.from(elements)) {
@@ -202,7 +199,6 @@ class FilterContainer extends HTMLElement {
   get resultsCounter() {
     if(!this._lookedFor.resultsCounter) {
       this._results = this.querySelector(`:scope [${this.attrs.results}]`);
-      console.log( "> resultsCounter QUERYSELECTOR", `:scope [${this.attrs.results}]` );
       this._lookedFor.resultsCounter = true;
     }
 
@@ -292,22 +288,22 @@ class FilterContainer extends HTMLElement {
     return params.getAll(key);
   }
 
-  updateUrl(key, value) {
-    // TODO fix with multiple inputs
-    return;
-    if(!this.baseUrl) {
-      this.baseUrl = window.location.pathname;
-    }
-
+  // Future improvement: url updates currently once per key (we could group these into one)
+  updateUrl(key, values) {
     let params = new URLSearchParams(this.getUrlSearchValue());
-    if(params.get(key) !== value) {
-      if(!value) {
-        params.delete(key);
-      } else {
-        params.set(key, value);
+    let keyParamsStr = params.getAll(key).sort().join(",");
+    let valuesStr = values.slice().sort().join(",");
+
+    if(keyParamsStr !== valuesStr) {
+      params.delete(key);
+      for(let value of values) {
+        if(value) { // ignore ""
+          params.append(key, value);
+        }
       }
 
-      history.replaceState({}, '', `${this.baseUrl}${params.toString().length > 0 ? `?${params}`: ""}` );
+      let baseUrl = window.location.pathname;
+      history.replaceState({}, '', `${baseUrl}${params.toString().length > 0 ? `?${params}`: ""}` );
     }
   }
 }

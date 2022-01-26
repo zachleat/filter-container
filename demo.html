@@ -17,8 +17,10 @@
 		}
 
 		/* Hide entries */
+		.filter-flag--hide,
+		.filter-color--hide,
 		.filter-continent--hide,
-		.filter-startswith--hide {
+		.filter-letter--hide {
 			display: none;
 		}
 		</style>
@@ -26,92 +28,98 @@
 	<body>
 		<h1><code>filter-container</code> Web Component Demo</h1>
 		<p>Go back to the <a href="https://github.com/zachleat/filter-container/">repository on GitHub</a>.</p>
-		<filter-container oninit delimiter=",">
+		<filter-container oninit delimiter=","><!-- leave-url-alone -->
 			<form class="demo-filter-form">
-				<p data-filter-results="country/countries" aria-live="polite"></p>
-				<!--<fieldset>
-					<legend>Select</legend>
+				<p data-filter-labels="country/countries" aria-live="polite"></p>
+				<fieldset>
+					<legend>Form Input</legend>
 					<label>
-						Filter by Continent:
-						<select name="continent" data-filter-bind="continent">
-							<option value="">All Continents</option>
-							<option value="africa">Africa</option>
-							<option value="antarctica">Antarctica</option>
-							<option value="australia">Australia</option>
-							<option value="asia">Asia</option>
-							<option value="europe">Europe</option>
-							<option value="south-america">South America</option>
-							<option value="north-america">North America</option>
+						Filter by Flag:
+						<input type="text" name="flag" data-filter-key="flag">
+					</label>
+				</fieldset>
+				<fieldset>
+					<legend>Form Select</legend>
+					<label>
+						Filter by Flag Color:
+						<select name="color" data-filter-key="color">
+							<option value="">All</option>
+							<option value="blue">Blue</option>
+							<option value="green">Green</option>
+							<option value="orange">Orange</option>
+							<option value="red">Red</option>
+							<option value="yellow">Yellow</option>
+							<option value="white">White</option>
 						</select>
 					</label>
-				</fieldset>-->
+				</fieldset>
 				<fieldset>
 					<legend>Checkboxes</legend>
-					Filter by Continent:
-					<label><input type="checkbox" name="continent" value="africa" data-filter-bind="continent">Africa</label>
-					<label><input type="checkbox" name="continent" value="antarctica" data-filter-bind="continent">Antarctica</label>
-					<label><input type="checkbox" name="continent" value="australia" data-filter-bind="continent">Australia</label>
-					<label><input type="checkbox" name="continent" value="asia" data-filter-bind="continent">Asia</label>
-					<label><input type="checkbox" name="continent" value="europe" data-filter-bind="continent">Europe</label>
-					<label><input type="checkbox" name="continent" value="south-america" data-filter-bind="continent">South America</label>
-					<label><input type="checkbox" name="continent" value="north-america" data-filter-bind="continent">North America</label>
+					Only show continents:
+					<label><input type="checkbox" name="continent" value="africa" data-filter-key="continent">Africa</label>
+					<label><input type="checkbox" name="continent" value="antarctica" data-filter-key="continent">Antarctica</label>
+					<label><input type="checkbox" name="continent" value="australia" data-filter-key="continent">Australia</label>
+					<label><input type="checkbox" name="continent" value="asia" data-filter-key="continent">Asia</label>
+					<label><input type="checkbox" name="continent" value="europe" data-filter-key="continent">Europe</label>
+					<label><input type="checkbox" name="continent" value="south-america" data-filter-key="continent">South America</label>
+					<label><input type="checkbox" name="continent" value="north-america" data-filter-key="continent">North America</label>
 				</fieldset>
 				<fieldset>
 					<legend>Radios</legend>
-					Filter by Continent:
-					<label><input type="radio" name="startswith" value="" data-filter-bind="startswith" checked>All</label>
-					<label><input type="radio" name="startswith" value="a" data-filter-bind="startswith">A</label>
-					<label><input type="radio" name="startswith" value="b" data-filter-bind="startswith">B</label>
-					<label><input type="radio" name="startswith" value="c" data-filter-bind="startswith">C</label>
-					<label><input type="radio" name="startswith" value="d" data-filter-bind="startswith">D</label>
-					<label><input type="radio" name="startswith" value="e" data-filter-bind="startswith">E</label>
-					<label><input type="radio" name="startswith" value="f" data-filter-bind="startswith">F</label>
-					<label><input type="radio" name="startswith" value="g" data-filter-bind="startswith">G</label>
+					Filter by First Letter:
+					<label><input type="radio" name="letter" value="" data-filter-key="letter" checked>(All)</label>
+					<label><input type="radio" name="letter" value="a" data-filter-key="letter">A</label>
+					<label><input type="radio" name="letter" value="b" data-filter-key="letter">B</label>
+					<label><input type="radio" name="letter" value="c" data-filter-key="letter">C</label>
+					<label><input type="radio" name="letter" value="d" data-filter-key="letter">D</label>
+					<label><input type="radio" name="letter" value="e" data-filter-key="letter">E</label>
+					<label><input type="radio" name="letter" value="f" data-filter-key="letter">F</label>
+					<label><input type="radio" name="letter" value="g" data-filter-key="letter">G</label>
 				</fieldset>
 			</form>
 			<ul>
-				<li data-filter-startswith="a" data-filter-continent="asia">Afghanistan</li>
-				<li data-filter-startswith="a" data-filter-continent="europe">Albania</li>
-				<li data-filter-startswith="a" data-filter-continent="africa">Algeria</li>
-				<li data-filter-startswith="a" data-filter-continent="south-america">Argentina</li>
-				<li data-filter-startswith="a" data-filter-continent="australia">Australia</li>
-				<li data-filter-startswith="b" data-filter-continent="asia">Bangladesh</li>
-				<li data-filter-startswith="b" data-filter-continent="europe">Belgium</li>
-				<li data-filter-startswith="b" data-filter-continent="europe">Belarus</li>
-				<li data-filter-startswith="b" data-filter-continent="south-america">Brazil</li>
-				<li data-filter-startswith="c" data-filter-continent="africa">Camaroon</li>
-				<li data-filter-startswith="c" data-filter-continent="north-america">Canada</li>
-				<li data-filter-startswith="c" data-filter-continent="asia">China</li>
-				<li data-filter-startswith="c" data-filter-continent="south-america">Columbia</li>
-				<li data-filter-startswith="d" data-filter-continent="europe">Denmark</li>
-				<li data-filter-startswith="e" data-filter-continent="africa,asia">Egypt</li>
-				<li data-filter-startswith="e" data-filter-continent="africa">Ethiopia</li>
-				<li data-filter-startswith="f" data-filter-continent="europe">France</li>
-				<li data-filter-startswith="g" data-filter-continent="europe">Germany</li>
-				<li data-filter-startswith="g" data-filter-continent="africa">Ghana</li>
-				<li data-filter-startswith="h" data-filter-continent="asia">Hong Kong</li>
-				<li data-filter-startswith="i" data-filter-continent="asia">India</li>
-				<li data-filter-startswith="i" data-filter-continent="asia">Indonesia</li>
-				<li data-filter-startswith="i" data-filter-continent="europe">Ireland</li>
-				<li data-filter-startswith="i" data-filter-continent="africa">Ivory Coast</li>
-				<li data-filter-startswith="i" data-filter-continent="europe">Italy</li>
-				<li data-filter-startswith="j" data-filter-continent="asia">Japan</li>
-				<li data-filter-startswith="m" data-filter-continent="africa">Madagascar</li>
-				<li data-filter-startswith="m" data-filter-continent="north-america">Mexico</li>
-				<li data-filter-startswith="n" data-filter-continent="africa">Nigeria</li>
-				<li data-filter-startswith="p" data-filter-continent="asia">Palestine</li>
-				<li data-filter-startswith="p" data-filter-continent="south-america">Panama</li>
-				<li data-filter-startswith="p" data-filter-continent="australia">Papau New Guinea</li>
-				<li data-filter-startswith="p" data-filter-continent="asia">Philippines</li>
-				<li data-filter-startswith="p" data-filter-continent="europe">Portugal</li>
-				<li data-filter-startswith="r" data-filter-continent="asia,europe">Russia</li>
-				<li data-filter-startswith="s" data-filter-continent="asia">South Korea</li>
-				<li data-filter-startswith="s" data-filter-continent="europe">Spain</li>
-				<li data-filter-startswith="t" data-filter-continent="asia">Taiwan</li>
-				<li data-filter-startswith="u" data-filter-continent="europe">United Kingdom</li>
-				<li data-filter-startswith="u" data-filter-continent="north-america">United States</li>
-				<li data-filter-startswith="z" data-filter-continent="africa">Zimbabwe</li>
-				<li data-filter-startswith data-filter-continent data-filter-results-exclude>Item excluded from count (for demo purposes)</li>
+				<li data-filter-letter="a" data-filter-continent="asia" data-filter-color="black,red,green" data-filter-flag="🇦🇫">🇦🇫 Afghanistan</li>
+				<li data-filter-letter="a" data-filter-continent="europe" data-filter-color="red,black" data-filter-flag="🇦🇱">🇦🇱 Albania</li>
+				<li data-filter-letter="a" data-filter-continent="africa" data-filter-color="green,red,white" data-filter-flag="🇩🇿">🇩🇿 Algeria</li>
+				<li data-filter-letter="a" data-filter-continent="south-america" data-filter-color="blue,white" data-filter-flag="🇦🇷">🇦🇷 Argentina</li>
+				<li data-filter-letter="a" data-filter-continent="australia" data-filter-color="red,white,blue" data-filter-flag="🇦🇺">🇦🇺 Australia</li>
+				<li data-filter-letter="b" data-filter-continent="asia" data-filter-color="green,red" data-filter-flag="🇧🇩">🇧🇩 Bangladesh</li>
+				<li data-filter-letter="b" data-filter-continent="europe" data-filter-color="black,yellow,red" data-filter-flag="🇧🇪">🇧🇪 Belgium</li>
+				<li data-filter-letter="b" data-filter-continent="europe" data-filter-color="red,green" data-filter-flag="🇧🇾">🇧🇾 Belarus</li>
+				<li data-filter-letter="b" data-filter-continent="south-america" data-filter-color="green,yellow,blue" data-filter-flag="🇧🇷">🇧🇷 Brazil</li>
+				<li data-filter-letter="c" data-filter-continent="africa" data-filter-color="green,red,yellow" data-filter-flag="🇨🇲">🇨🇲 Cameroon</li>
+				<li data-filter-letter="c" data-filter-continent="north-america" data-filter-color="white,red" data-filter-flag="🇨🇦">🇨🇦 Canada</li>
+				<li data-filter-letter="c" data-filter-continent="asia" data-filter-color="yellow,red" data-filter-flag="🇨🇳">🇨🇳 China</li>
+				<li data-filter-letter="c" data-filter-continent="south-america" data-filter-color="yellow,blue,red" data-filter-flag="🇨🇴">🇨🇴 Colombia</li>
+				<li data-filter-letter="d" data-filter-continent="europe" data-filter-color="white,red" data-filter-flag="🇩🇰">🇩🇰 Denmark</li>
+				<li data-filter-letter="e" data-filter-continent="africa,asia" data-filter-color="red,white,black" data-filter-flag="🇪🇬">🇪🇬 Egypt</li>
+				<li data-filter-letter="e" data-filter-continent="africa" data-filter-color="red,yellow,green,blue" data-filter-flag="🇪🇹">🇪🇹 Ethiopia</li>
+				<li data-filter-letter="f" data-filter-continent="europe" data-filter-color="blue,red,white" data-filter-flag="🇫🇷">🇫🇷 France</li>
+				<li data-filter-letter="g" data-filter-continent="europe" data-filter-color="black,red,yellow" data-filter-flag="🇩🇪">🇩🇪 Germany</li>
+				<li data-filter-letter="g" data-filter-continent="africa" data-filter-color="red,yellow,green" data-filter-flag="🇬🇭">🇬🇭 Ghana</li>
+				<li data-filter-letter="h" data-filter-continent="asia" data-filter-color="red,white" data-filter-flag="🇭🇰">🇭🇰 Hong Kong</li>
+				<li data-filter-letter="i" data-filter-continent="asia" data-filter-color="orange,white,green" data-filter-flag="🇮🇳">🇮🇳 India</li>
+				<li data-filter-letter="i" data-filter-continent="asia" data-filter-color="red,white" data-filter-flag="🇮🇩">🇮🇩 Indonesia</li>
+				<li data-filter-letter="i" data-filter-continent="europe" data-filter-color="green,white,orange" data-filter-flag="🇮🇪">🇮🇪 Ireland</li>
+				<li data-filter-letter="i" data-filter-continent="africa" data-filter-color="green,white,orange" data-filter-flag="🇨🇮">🇨🇮 Ivory Coast</li>
+				<li data-filter-letter="i" data-filter-continent="europe" data-filter-color="green,white,red" data-filter-flag="🇮🇹">🇮🇹 Italy</li>
+				<li data-filter-letter="j" data-filter-continent="asia" data-filter-color="red,white" data-filter-flag="🇯🇵">🇯🇵 Japan</li>
+				<li data-filter-letter="m" data-filter-continent="africa" data-filter-color="white,red,green" data-filter-flag="🇲🇬">🇲🇬 Madagascar</li>
+				<li data-filter-letter="m" data-filter-continent="north-america" data-filter-color="green,white,red" data-filter-flag="🇲🇽">🇲🇽 Mexico</li>
+				<li data-filter-letter="n" data-filter-continent="africa" data-filter-color="green,white" data-filter-flag="🇳🇬">🇳🇬 Nigeria</li>
+				<li data-filter-letter="p" data-filter-continent="asia" data-filter-color="red,white,green,black" data-filter-flag="🇵🇸">🇵🇸 Palestine</li>
+				<li data-filter-letter="p" data-filter-continent="south-america" data-filter-color="blue,red,white" data-filter-flag="🇵🇦">🇵🇦 Panama</li>
+				<li data-filter-letter="p" data-filter-continent="australia" data-filter-color="black,red,yellow,white" data-filter-flag="🇵🇬">🇵🇬 Papua New Guinea</li>
+				<li data-filter-letter="p" data-filter-continent="asia" data-filter-color="red,white,blue,yellow" data-filter-flag="🇵🇭">🇵🇭 Philippines</li>
+				<li data-filter-letter="p" data-filter-continent="europe" data-filter-color="green,red,yellow,white,blue" data-filter-flag="🇵🇹">🇵🇹 Portugal</li>
+				<li data-filter-letter="r" data-filter-continent="asia,europe" data-filter-color="red,white,blue" data-filter-flag="🇷🇺">🇷🇺 Russia</li>
+				<li data-filter-letter="s" data-filter-continent="asia" data-filter-color="red,white,black,blue" data-filter-flag="🇰🇷">🇰🇷 South Korea</li>
+				<li data-filter-letter="s" data-filter-continent="europe" data-filter-color="yellow,red" data-filter-flag="🇪🇸">🇪🇸 Spain</li>
+				<li data-filter-letter="t" data-filter-continent="asia" data-filter-color="red,blue,white" data-filter-flag="🇹🇼">🇹🇼 Taiwan</li>
+				<li data-filter-letter="u" data-filter-continent="europe" data-filter-color="red,blue,white" data-filter-flag="🇬🇧">🇬🇧 United Kingdom</li>
+				<li data-filter-letter="u" data-filter-continent="north-america" data-filter-color="red,white,blue" data-filter-flag="🇺🇸">🇺🇸 United States</li>
+				<li data-filter-letter="z" data-filter-continent="africa" data-filter-color="green,yellow,red,black,white" data-filter-flag="🇿🇼">🇿🇼 Zimbabwe</li>
+				<li data-filter-results-exclude data-filter-letter data-filter-continent data-filter-flag>Item excluded from count (for demo purposes)</li>
 			</ul>
 			<p>Sorry if your country is missing, I typed this out by hand 😅</p>
 		</filter-container>
