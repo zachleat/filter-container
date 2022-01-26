@@ -2,9 +2,9 @@ class FilterContainer extends HTMLElement {
   constructor() {
     super();
     this.attrs = {
+      oninit: "oninit",
+      valueDelimiter: "delimiter",
       bind: "data-filter-bind",
-      oninit: "data-oninit",
-      delimiter: "data-filter-delimiter",
       results: "data-filter-results",
       resultsExclude: "data-filter-results-exclude",
       skipUrlUpdate: "data-filter-skip-url",
@@ -16,120 +16,136 @@ class FilterContainer extends HTMLElement {
   }
 
   connectedCallback() {
+    this.init();
+  }
+
+  init() {
+    this._lookedFor = {};
+
     this.classList.add(this.classes.enhanced);
 
-    this.results = this.querySelector(`[${this.attrs.results}]`);
-    let formElements = this.getAllFormElements();
-    this.bindEvents(formElements);
+    this.bindEvents(this.formElements);
 
     if(this.hasAttribute(this.attrs.oninit)) {
       // This timeout was necessary to fix a bug with Google Chrome 93
       // Navigate to a filterable page, navigate away, use the back button to return
       // (connectedCallback would filter before the DOM was ready)
       window.setTimeout(() => {
-        this.filterAll(formElements, true);
+        for(let key in this.formElements) {
+          this.initFormElements(this.formElements[key]);
+          this.applyFilterForKey(key);
+          this.renderResultCount(true);
+        }
       }, 0);
     }
   }
-  
-  getAllFormElements() {
-    return this.querySelectorAll(`[${this.attrs.bind}]`);
+
+  get valueDelimiter() {
+    if(!this._valueDelimiter) {
+      this._valueDelimiter = this.getAttribute(this.attrs.valueDelimiter) || ",";
+    }
+
+    return this._valueDelimiter;
+  }
+
+  get formElements() {
+    if(!this._lookedFor.formElements) {
+      let selector = `:scope [${this.attrs.bind}]`;
+      let results = {};
+      console.log( "> formElements QUERYSELECTOR", selector );
+      for(let node of this.querySelectorAll(selector)) {
+        let attr = node.getAttribute(this.attrs.bind);
+        if(!results[attr]) {
+          results[attr] = [];
+        }
+        results[attr].push(node);
+      }
+      this._formElements = results;
+      this._lookedFor.formElements = true;
+    }
+
+    return this._formElements;
   }
 
   getAllKeys() {
-    let keys = new Set();
-    for(let formEl of this.getAllFormElements()) {
-      keys.add(formEl.getAttribute(this.attrs.bind));
-    }
-    return Array.from(keys);
+    return Object.keys(this.formElements);
   }
   
   getElementSelector(key) {
     return `data-filter-${key}`
   }
 
-  getAllFilterableElements() {
-    let keys = this.getAllKeys();
-    let selector = keys.map(key => {
-      return `[${this.getElementSelector(key)}]`;
-    }).join(",");
-    return this.querySelectorAll(selector);
-  }
-
-  bindEvents(formElements) {
-    for(let el of formElements) {
-      el.addEventListener("input", e => {
-        this.filter(e.target);
+  bindEvents() {
+    this.addEventListener("input", e => {
+      let closest = e.target.closest(`[${this.attrs.bind}]`);
+      if(closest) {
+        this.applyFilterForElement(closest);
         requestAnimationFrame(() => {
           this.renderResultCount();
-        })
-      }, false);
-    }
+        });
+      }
+    }, false);
   }
 
-  filterAll(formElements, isOnload = false) {
+  initFormElements(formElements) {
     for(let el of formElements) {
-      if(isOnload) {
-        let urlParamValue = this.getCurrentUrlFilterValue(el);
-        if(urlParamValue) {
-          el.value = urlParamValue;
+      let urlParamValues = this.getUrlFilterValues(el);
+      for(let value of urlParamValues) {
+        let type = el.getAttribute("type");
+        if(el.tagName === "INPUT" && (type === "checkbox" || type === "radio")) {
+          if(el.value === value) {
+            el.checked = true;
+          }
+        } else {
+          el.value = value;
         }
       }
-
-      this.filter(el);
-    }
-    this.renderResultCount();
-  }
-
-  getSearchValue() {
-    if(window.location.search.startsWith("?")) {
-      return window.location.search.substr(1);
-    }
-    return window.location.search;
-  }
-
-  getCurrentUrlFilterValue(formElement) {
-    let params = new URLSearchParams(this.getSearchValue());
-    return params.get(this.getKey(formElement));
-  }
-
-  updateUrl(key, value) {
-    if(!this.baseUrl) {
-      this.baseUrl = window.location.pathname;
-    }
-
-    let params = new URLSearchParams(this.getSearchValue());
-    if(params.get(key) !== value) {
-      if(!value) {
-        params.delete(key);
-      } else {
-        params.set(key, value);
-      }
-
-      history.replaceState({}, '', `${this.baseUrl}${params.toString().length > 0 ? `?${params}`: ""}` );
     }
   }
 
-  getKey(formElement) {
+  getFormElementKey(formElement) {
     return formElement.getAttribute(this.attrs.bind);
   }
 
-  filter(formElement) {
-    let key = this.getKey(formElement);
-    let delimiter = formElement.getAttribute(this.attrs.delimiter);
-
-    let value = formElement.value;
-
-    if(!formElement.hasAttribute(this.attrs.skipUrlUpdate)) {
-      this.updateUrl(key, value);
+  _getMap(key) {
+    let values = [];
+    for(let formElement of this.formElements[key]) {
+      let type = formElement.getAttribute("type");
+      if(formElement.tagName === "INPUT" && (type === "checkbox" || type === "radio")) {
+        if(formElement.checked) {
+          values.push(formElement.value);
+        }
+      } else {
+        values.push(formElement.value);
+      }
     }
 
-    let elementsSelectorAttr = this.getElementSelector(key);
-    let elements = this.querySelectorAll(`[${elementsSelectorAttr}]`);
-    let cls = `filter-${key}--hide`;
+    // TODO update URL
+    // if(!formElement.hasAttribute(this.attrs.skipUrlUpdate)) {
+      //   this.updateUrl(key, value);
+    // }
 
+    let elementsSelectorAttr = this.getElementSelector(key);
+    let selector = `:scope [${elementsSelectorAttr}]`;
+    let elements = this.querySelectorAll(selector);
+    console.log( "> _getMap QUERYSELECTOR", selector );
+
+    let map = new Map();
     for(let element of Array.from(elements)) {
-      if(this.elementIsValid(element, elementsSelectorAttr, value, delimiter)) {
+      let isValid = this.elementIsValid(element, elementsSelectorAttr, values);
+      map.set(element, isValid)
+    }
+    return map;
+  }
+
+  _applyMapForKey(key, map) {
+    if(!key) {
+      return;
+    }
+
+    for(let [element, isVisible] of map) {
+      let cls = `filter-${key}--hide`;
+      if(isVisible) {
         element.classList.remove(cls);
       } else {
         element.classList.add(cls);
@@ -137,18 +153,73 @@ class FilterContainer extends HTMLElement {
     }
   }
 
-  elementIsValid(element, attributeName, value, delimiter) {
-    if(!value && element.hasAttribute(attributeName)) {
+  applyFilterForElement(formElement) {
+    let key = this.getFormElementKey(formElement);
+    this.applyFilterForKey(key);
+  }
+
+  applyFilterForKey(key) {
+    let firstFormElementForDelimiter = this.formElements[key][0];
+    if(!firstFormElementForDelimiter) {
+      return;
+    }
+    let map = this._getMap(key);
+    this._applyMapForKey(key, map);
+  }
+
+  _hasValue(needle, haystack = []) {
+    if(!haystack || !haystack.length || !Array.isArray(haystack)) {
+      return false;
+    }
+
+    if(!Array.isArray(needle)) {
+      needle = [needle];
+    }
+    for(let lookingFor of needle) {
+      if(haystack.some((val) => val === lookingFor)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  elementIsValid(element, attributeName, values) {
+    let hasAttr = element.hasAttribute(attributeName);
+    if(hasAttr && (!values.length || !values.join(""))) { // [] or [''] for value="" radio
       return true;
     }
-    let attrValue = element.getAttribute(attributeName);
-    if(delimiter && attrValue.split(delimiter).indexOf(value) > -1) {
-      return true;
-    }
-    if(!delimiter && attrValue === value) {
+    let haystack = (element.getAttribute(attributeName) || "").split(this.valueDelimiter);
+    if(hasAttr && this._hasValue(haystack, values)) {
       return true;
     }
     return false;
+  }
+
+  /*
+   * Feature: Result count
+   */
+
+  get resultsCounter() {
+    if(!this._lookedFor.resultsCounter) {
+      this._results = this.querySelector(`:scope [${this.attrs.results}]`);
+      console.log( "> resultsCounter QUERYSELECTOR", `:scope [${this.attrs.results}]` );
+      this._lookedFor.resultsCounter = true;
+    }
+
+    return this._results;
+  }
+
+  getGlobalCount() {
+    let keys = this.getAllKeys();
+    let selector = keys.map(key => {
+      return `:scope [${this.getElementSelector(key)}]`;
+    }).join(",");
+    let elements = this.querySelectorAll(selector);
+
+    return Array.from(elements)
+      .filter(entry => this.elementIsVisible(entry))
+      .filter(entry => !this.elementIsExcluded(entry))
+      .length;
   }
 
   elementIsVisible(element) {
@@ -165,8 +236,8 @@ class FilterContainer extends HTMLElement {
   }
 
   getLabels() {
-    if(this.results) {
-      let attrValue = this.results.getAttribute(this.attrs.results);
+    if(this.resultsCounter) {
+      let attrValue = this.resultsCounter.getAttribute(this.attrs.results);
       let split = attrValue.split("/");
       if(split.length === 2) {
         return split;
@@ -175,27 +246,68 @@ class FilterContainer extends HTMLElement {
     return ["Result", "Results"];
   }
 
-  renderResultCount() {
-    if(!this.results) {
+  _renderResultCount(count) {
+    if(!this.resultsCounter) {
+      return;
+    }
+    if(!count) {
+      count = this.getGlobalCount();
+    }
+
+    let labels = this.getLabels();
+    this.resultsCounter.innerText = `${count} ${count !== 1 ? labels[1] : labels[0]}`;
+  }
+
+  renderResultCount(isOnload = false) {
+    if(!this.resultsCounter) {
       return;
     }
 
-    let fn = () => {
-      let count = Array.from(this.getAllFilterableElements())
-      .filter(entry => this.elementIsVisible(entry))
-      .filter(entry => !this.elementIsExcluded(entry))
-        .length;
-
-      let labels = this.getLabels();
-      this.results.innerHTML = `${count} ${count !== 1 ? labels[1] : labels[0]}`;
-    };
-
-    if(this.results.hasAttribute("aria-live")) {
+    if(!isOnload && this.resultsCounter.hasAttribute("aria-live")) {
       // This timeout helped VoiceOver
       clearTimeout(this.timeout);
-      this.timeout = setTimeout(fn, 250);
+      this.timeout = setTimeout(() => {
+        this._renderResultCount()
+      }, 250);
     } else {
-      fn();
+      this._renderResultCount();
+    }
+  }
+
+  /*
+   * Feature: Work with URLs
+   */
+
+  getUrlSearchValue() {
+    let s = window.location.search;
+    if(s.startsWith("?")) {
+      return s.substr(1);
+    }
+    return s;
+  }
+
+  getUrlFilterValues(formElement) {
+    let params = new URLSearchParams(this.getUrlSearchValue());
+    let key = this.getFormElementKey(formElement);
+    return params.getAll(key);
+  }
+
+  updateUrl(key, value) {
+    // TODO fix with multiple inputs
+    return;
+    if(!this.baseUrl) {
+      this.baseUrl = window.location.pathname;
+    }
+
+    let params = new URLSearchParams(this.getUrlSearchValue());
+    if(params.get(key) !== value) {
+      if(!value) {
+        params.delete(key);
+      } else {
+        params.set(key, value);
+      }
+
+      history.replaceState({}, '', `${this.baseUrl}${params.toString().length > 0 ? `?${params}`: ""}` );
     }
   }
 }
