@@ -1,6 +1,6 @@
 # Filter Container
 
-A themeless web component to filter visible child elements based on form field values.
+A themeless zero-dependency web component to filter visible child elements based on form field values.
 
 * [Demo](https://zachleat.github.io/filter-container/demo.html)
 * [Demo on jamstack.org](https://jamstack.org/generators/) (Filter by Language, Template, or License)
