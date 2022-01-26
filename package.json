@@ -1,6 +1,6 @@
 {
   "name": "@zachleat/filter-container",
-  "version": "2.0.3",
+  "version": "3.0.0",
   "description": "Filtering visible child elements based on form field values.",
   "main": "filter-container.js",
   "publishConfig": {
