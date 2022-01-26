@@ -6,7 +6,7 @@ class FilterContainer extends HTMLElement {
       valueDelimiter: "delimiter",
       leaveUrlAlone: "leave-url-alone",
       bind: "data-filter-key",
-      results: "data-filter-labels",
+      results: "data-filter-results",
       resultsExclude: "data-filter-results-exclude",
     };
     this.classes = {

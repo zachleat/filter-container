@@ -30,7 +30,7 @@ Please see the demo for sample code. Use:
 
 * This component will not filter on initialization unless you use `<filter-container oninit>`. By default the form field needs to change for filtering to take place.
 * Add the `data-filter-results` attribute to any child element of the component if you’d like us to populate it with the number of results.
-  * Add a string to this attribute value to customize your Results labels (delimited by `/`). e.g. `data-filter-labels="Country/Countries"`
+  * Add a string to this attribute value to customize your Results labels (delimited by `/`). e.g. `data-filter-results="Country/Countries"`
   * Add `aria-live="polite"` to this element and screen readers will announce when the text changes.
 * Use `<filter-container delimiter=",">` if your content elements may have more than one filter value assigned (in this example delimited by a comma).
   * For example, Egypt is in both Africa and Asia: `<li data-filter-continent="africa,asia">Egypt</li>`
@@ -42,7 +42,6 @@ Please see the demo for sample code. Use:
 - Added support for radio and checkbox inputs for filtering.
 - Renamed attributes:
   - `data-oninit` renamed to `oninit`
-  - `data-filter-results` renamed to `data-filter-labels`
   - `data-filter-delimiter` renamed to `delimiter` (only supported on `<filter-container>`)
   - `data-filter-skip-url` renamed to `leave-url-alone` (only supported on `<filter-container>`)
 
