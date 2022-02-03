@@ -29,7 +29,7 @@
 	<body>
 		<h1><code>filter-container</code> Web Component Demo</h1>
 		<p>Go back to the <a href="https://github.com/zachleat/filter-container/">repository on GitHub</a>.</p>
-		<filter-container oninit delimiter="," filter-mode-color="all"><!-- leave-url-alone --><!-- filter-color-mode="any" -->
+		<filter-container oninit delimiter="," filter-mode="all" filter-mode-continent="any"><!-- also `leave-url-alone` -->
 			<form class="demo-filter-form">
 				<button type="reset">Reset</button>
 				<p data-filter-results="country/countries" aria-live="polite"></p>
@@ -129,7 +129,7 @@
 				<li data-filter-wordcount="2" data-filter-letter="u" data-filter-continent="europe" data-filter-color="red,blue,white" data-filter-flag="🇬🇧">🇬🇧 United Kingdom</li>
 				<li data-filter-wordcount="2" data-filter-letter="u" data-filter-continent="north-america" data-filter-color="red,white,blue" data-filter-flag="🇺🇸">🇺🇸 United States</li>
 				<li data-filter-wordcount="1" data-filter-letter="z" data-filter-continent="africa" data-filter-color="green,yellow,red,black,white" data-filter-flag="🇿🇼">🇿🇼 Zimbabwe</li>
-				<li data-filter-results-exclude data-filter-letter data-filter-continent data-filter-flag>Item excluded from count (for demo purposes)</li>
+				<li data-filter-results-exclude data-filter-letter data-filter-continent data-filter-flag data-filter-wordcount data-filter-color>Item excluded from count (for demo purposes)</li>
 			</ul>
 			<p>Sorry if your country is missing, I typed this out by hand 😅</p>
 		</filter-container>

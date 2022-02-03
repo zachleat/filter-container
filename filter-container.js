@@ -5,7 +5,7 @@ class FilterContainer extends HTMLElement {
       oninit: "oninit",
       valueDelimiter: "delimiter",
       leaveUrlAlone: "leave-url-alone",
-      mode: "filter-mode-",
+      mode: "filter-mode",
       bind: "data-filter-key",
       results: "data-filter-results",
       resultsExclude: "data-filter-results-exclude",
@@ -84,8 +84,15 @@ class FilterContainer extends HTMLElement {
       this.modes = {};
     }
     if(!this.modes[key]) {
-      this.modes[key] = this.getAttribute(this.attrs.mode + key);
+      this.modes[key] = this.getAttribute(`${this.attrs.mode}-${key}`);
     }
+    if(!this.modes[key]) {
+      if(!this.globalMode) {
+        this.globalMode = this.getAttribute(this.attrs.mode);
+      }
+      return this.globalMode;
+    }
+
     return this.modes[key];
   }
 
@@ -187,6 +194,8 @@ class FilterContainer extends HTMLElement {
     if(!Array.isArray(needle)) {
       needle = [needle];
     }
+
+    // all must match
     if(mode === "all") {
       let found = true;
       for(let lookingFor of haystack) {
@@ -196,6 +205,7 @@ class FilterContainer extends HTMLElement {
       }
       return found;
     }
+
     for(let lookingFor of needle) {
       // has any, return true
       if(haystack.some((val) => val === lookingFor)) {
