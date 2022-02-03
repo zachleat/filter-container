@@ -20,6 +20,7 @@
 		.filter-flag--hide,
 		.filter-color--hide,
 		.filter-continent--hide,
+		.filter-wordcount--hide,
 		.filter-letter--hide {
 			display: none;
 		}
@@ -28,8 +29,9 @@
 	<body>
 		<h1><code>filter-container</code> Web Component Demo</h1>
 		<p>Go back to the <a href="https://github.com/zachleat/filter-container/">repository on GitHub</a>.</p>
-		<filter-container oninit delimiter=","><!-- leave-url-alone -->
+		<filter-container oninit delimiter="," filter-mode-color="all"><!-- leave-url-alone --><!-- filter-color-mode="any" -->
 			<form class="demo-filter-form">
+				<button type="reset">Reset</button>
 				<p data-filter-results="country/countries" aria-live="polite"></p>
 				<fieldset>
 					<legend>Form Input</legend>
@@ -39,23 +41,18 @@
 					</label>
 				</fieldset>
 				<fieldset>
-					<legend>Form Select</legend>
-					<label>
-						Filter by Flag Color:
-						<select name="color" data-filter-key="color">
-							<option value="">All</option>
-							<option value="blue">Blue</option>
-							<option value="green">Green</option>
-							<option value="orange">Orange</option>
-							<option value="red">Red</option>
-							<option value="yellow">Yellow</option>
-							<option value="white">White</option>
-						</select>
-					</label>
+					<legend>Checkbox (all)</legend>
+					Only show Flags with all of these colors:
+					<label><input type="checkbox" name="color" value="blue" data-filter-key="color">Blue</label>
+					<label><input type="checkbox" name="color" value="green" data-filter-key="color">Green</label>
+					<label><input type="checkbox" name="color" value="orange" data-filter-key="color">Orange</label>
+					<label><input type="checkbox" name="color" value="red" data-filter-key="color">Red</label>
+					<label><input type="checkbox" name="color" value="yellow" data-filter-key="color">Yellow</label>
+					<label><input type="checkbox" name="color" value="white" data-filter-key="color">White</label>
 				</fieldset>
 				<fieldset>
-					<legend>Checkboxes</legend>
-					Only show continents:
+					<legend>Checkboxes (any)</legend>
+					Show countries on any of these continents:
 					<label><input type="checkbox" name="continent" value="africa" data-filter-key="continent">Africa</label>
 					<label><input type="checkbox" name="continent" value="antarctica" data-filter-key="continent">Antarctica</label>
 					<label><input type="checkbox" name="continent" value="australia" data-filter-key="continent">Australia</label>
@@ -76,49 +73,61 @@
 					<label><input type="radio" name="letter" value="f" data-filter-key="letter">F</label>
 					<label><input type="radio" name="letter" value="g" data-filter-key="letter">G</label>
 				</fieldset>
+				<fieldset>
+					<legend>Select</legend>
+					Words in the name:
+					<label>
+						<select name="wordcount" data-filter-key="wordcount">
+							<option value="">Any</option>
+							<option value="1">1</option>
+							<option value="2">2</option>
+							<option value="3">3</option>
+						</select>
+					</label>
+				</fieldset>
 			</form>
 			<ul>
-				<li data-filter-letter="a" data-filter-continent="asia" data-filter-color="black,red,green" data-filter-flag="🇦🇫">🇦🇫 Afghanistan</li>
-				<li data-filter-letter="a" data-filter-continent="europe" data-filter-color="red,black" data-filter-flag="🇦🇱">🇦🇱 Albania</li>
-				<li data-filter-letter="a" data-filter-continent="africa" data-filter-color="green,red,white" data-filter-flag="🇩🇿">🇩🇿 Algeria</li>
-				<li data-filter-letter="a" data-filter-continent="south-america" data-filter-color="blue,white" data-filter-flag="🇦🇷">🇦🇷 Argentina</li>
-				<li data-filter-letter="a" data-filter-continent="australia" data-filter-color="red,white,blue" data-filter-flag="🇦🇺">🇦🇺 Australia</li>
-				<li data-filter-letter="b" data-filter-continent="asia" data-filter-color="green,red" data-filter-flag="🇧🇩">🇧🇩 Bangladesh</li>
-				<li data-filter-letter="b" data-filter-continent="europe" data-filter-color="black,yellow,red" data-filter-flag="🇧🇪">🇧🇪 Belgium</li>
-				<li data-filter-letter="b" data-filter-continent="europe" data-filter-color="red,green" data-filter-flag="🇧🇾">🇧🇾 Belarus</li>
-				<li data-filter-letter="b" data-filter-continent="south-america" data-filter-color="green,yellow,blue" data-filter-flag="🇧🇷">🇧🇷 Brazil</li>
-				<li data-filter-letter="c" data-filter-continent="africa" data-filter-color="green,red,yellow" data-filter-flag="🇨🇲">🇨🇲 Cameroon</li>
-				<li data-filter-letter="c" data-filter-continent="north-america" data-filter-color="white,red" data-filter-flag="🇨🇦">🇨🇦 Canada</li>
-				<li data-filter-letter="c" data-filter-continent="asia" data-filter-color="yellow,red" data-filter-flag="🇨🇳">🇨🇳 China</li>
-				<li data-filter-letter="c" data-filter-continent="south-america" data-filter-color="yellow,blue,red" data-filter-flag="🇨🇴">🇨🇴 Colombia</li>
-				<li data-filter-letter="d" data-filter-continent="europe" data-filter-color="white,red" data-filter-flag="🇩🇰">🇩🇰 Denmark</li>
-				<li data-filter-letter="e" data-filter-continent="africa,asia" data-filter-color="red,white,black" data-filter-flag="🇪🇬">🇪🇬 Egypt</li>
-				<li data-filter-letter="e" data-filter-continent="africa" data-filter-color="red,yellow,green,blue" data-filter-flag="🇪🇹">🇪🇹 Ethiopia</li>
-				<li data-filter-letter="f" data-filter-continent="europe" data-filter-color="blue,red,white" data-filter-flag="🇫🇷">🇫🇷 France</li>
-				<li data-filter-letter="g" data-filter-continent="europe" data-filter-color="black,red,yellow" data-filter-flag="🇩🇪">🇩🇪 Germany</li>
-				<li data-filter-letter="g" data-filter-continent="africa" data-filter-color="red,yellow,green" data-filter-flag="🇬🇭">🇬🇭 Ghana</li>
-				<li data-filter-letter="h" data-filter-continent="asia" data-filter-color="red,white" data-filter-flag="🇭🇰">🇭🇰 Hong Kong</li>
-				<li data-filter-letter="i" data-filter-continent="asia" data-filter-color="orange,white,green" data-filter-flag="🇮🇳">🇮🇳 India</li>
-				<li data-filter-letter="i" data-filter-continent="asia" data-filter-color="red,white" data-filter-flag="🇮🇩">🇮🇩 Indonesia</li>
-				<li data-filter-letter="i" data-filter-continent="europe" data-filter-color="green,white,orange" data-filter-flag="🇮🇪">🇮🇪 Ireland</li>
-				<li data-filter-letter="i" data-filter-continent="africa" data-filter-color="green,white,orange" data-filter-flag="🇨🇮">🇨🇮 Ivory Coast</li>
-				<li data-filter-letter="i" data-filter-continent="europe" data-filter-color="green,white,red" data-filter-flag="🇮🇹">🇮🇹 Italy</li>
-				<li data-filter-letter="j" data-filter-continent="asia" data-filter-color="red,white" data-filter-flag="🇯🇵">🇯🇵 Japan</li>
-				<li data-filter-letter="m" data-filter-continent="africa" data-filter-color="white,red,green" data-filter-flag="🇲🇬">🇲🇬 Madagascar</li>
-				<li data-filter-letter="m" data-filter-continent="north-america" data-filter-color="green,white,red" data-filter-flag="🇲🇽">🇲🇽 Mexico</li>
-				<li data-filter-letter="n" data-filter-continent="africa" data-filter-color="green,white" data-filter-flag="🇳🇬">🇳🇬 Nigeria</li>
-				<li data-filter-letter="p" data-filter-continent="asia" data-filter-color="red,white,green,black" data-filter-flag="🇵🇸">🇵🇸 Palestine</li>
-				<li data-filter-letter="p" data-filter-continent="south-america" data-filter-color="blue,red,white" data-filter-flag="🇵🇦">🇵🇦 Panama</li>
-				<li data-filter-letter="p" data-filter-continent="australia" data-filter-color="black,red,yellow,white" data-filter-flag="🇵🇬">🇵🇬 Papua New Guinea</li>
-				<li data-filter-letter="p" data-filter-continent="asia" data-filter-color="red,white,blue,yellow" data-filter-flag="🇵🇭">🇵🇭 Philippines</li>
-				<li data-filter-letter="p" data-filter-continent="europe" data-filter-color="green,red,yellow,white,blue" data-filter-flag="🇵🇹">🇵🇹 Portugal</li>
-				<li data-filter-letter="r" data-filter-continent="asia,europe" data-filter-color="red,white,blue" data-filter-flag="🇷🇺">🇷🇺 Russia</li>
-				<li data-filter-letter="s" data-filter-continent="asia" data-filter-color="red,white,black,blue" data-filter-flag="🇰🇷">🇰🇷 South Korea</li>
-				<li data-filter-letter="s" data-filter-continent="europe" data-filter-color="yellow,red" data-filter-flag="🇪🇸">🇪🇸 Spain</li>
-				<li data-filter-letter="t" data-filter-continent="asia" data-filter-color="red,blue,white" data-filter-flag="🇹🇼">🇹🇼 Taiwan</li>
-				<li data-filter-letter="u" data-filter-continent="europe" data-filter-color="red,blue,white" data-filter-flag="🇬🇧">🇬🇧 United Kingdom</li>
-				<li data-filter-letter="u" data-filter-continent="north-america" data-filter-color="red,white,blue" data-filter-flag="🇺🇸">🇺🇸 United States</li>
-				<li data-filter-letter="z" data-filter-continent="africa" data-filter-color="green,yellow,red,black,white" data-filter-flag="🇿🇼">🇿🇼 Zimbabwe</li>
+				<li data-filter-wordcount="1" data-filter-letter="a" data-filter-continent="asia" data-filter-color="black,red,green" data-filter-flag="🇦🇫">🇦🇫 Afghanistan</li>
+				<li data-filter-wordcount="1" data-filter-letter="a" data-filter-continent="europe" data-filter-color="red,black" data-filter-flag="🇦🇱">🇦🇱 Albania</li>
+				<li data-filter-wordcount="1" data-filter-letter="a" data-filter-continent="africa" data-filter-color="green,red,white" data-filter-flag="🇩🇿">🇩🇿 Algeria</li>
+				<li data-filter-wordcount="1" data-filter-letter="a" data-filter-continent="south-america" data-filter-color="blue,white" data-filter-flag="🇦🇷">🇦🇷 Argentina</li>
+				<li data-filter-wordcount="1" data-filter-letter="a" data-filter-continent="australia" data-filter-color="red,white,blue" data-filter-flag="🇦🇺">🇦🇺 Australia</li>
+				<li data-filter-wordcount="1" data-filter-letter="b" data-filter-continent="asia" data-filter-color="green,red" data-filter-flag="🇧🇩">🇧🇩 Bangladesh</li>
+				<li data-filter-wordcount="1" data-filter-letter="b" data-filter-continent="europe" data-filter-color="black,yellow,red" data-filter-flag="🇧🇪">🇧🇪 Belgium</li>
+				<li data-filter-wordcount="1" data-filter-letter="b" data-filter-continent="europe" data-filter-color="red,green" data-filter-flag="🇧🇾">🇧🇾 Belarus</li>
+				<li data-filter-wordcount="1" data-filter-letter="b" data-filter-continent="south-america" data-filter-color="green,yellow,blue" data-filter-flag="🇧🇷">🇧🇷 Brazil</li>
+				<li data-filter-wordcount="1" data-filter-letter="c" data-filter-continent="africa" data-filter-color="green,red,yellow" data-filter-flag="🇨🇲">🇨🇲 Cameroon</li>
+				<li data-filter-wordcount="1" data-filter-letter="c" data-filter-continent="north-america" data-filter-color="white,red" data-filter-flag="🇨🇦">🇨🇦 Canada</li>
+				<li data-filter-wordcount="1" data-filter-letter="c" data-filter-continent="asia" data-filter-color="yellow,red" data-filter-flag="🇨🇳">🇨🇳 China</li>
+				<li data-filter-wordcount="1" data-filter-letter="c" data-filter-continent="south-america" data-filter-color="yellow,blue,red" data-filter-flag="🇨🇴">🇨🇴 Colombia</li>
+				<li data-filter-wordcount="1" data-filter-letter="d" data-filter-continent="europe" data-filter-color="white,red" data-filter-flag="🇩🇰">🇩🇰 Denmark</li>
+				<li data-filter-wordcount="1" data-filter-letter="e" data-filter-continent="africa,asia" data-filter-color="red,white,black" data-filter-flag="🇪🇬">🇪🇬 Egypt</li>
+				<li data-filter-wordcount="1" data-filter-letter="e" data-filter-continent="africa" data-filter-color="red,yellow,green,blue" data-filter-flag="🇪🇹">🇪🇹 Ethiopia</li>
+				<li data-filter-wordcount="1" data-filter-letter="f" data-filter-continent="europe" data-filter-color="blue,red,white" data-filter-flag="🇫🇷">🇫🇷 France</li>
+				<li data-filter-wordcount="1" data-filter-letter="g" data-filter-continent="europe" data-filter-color="black,red,yellow" data-filter-flag="🇩🇪">🇩🇪 Germany</li>
+				<li data-filter-wordcount="1" data-filter-letter="g" data-filter-continent="africa" data-filter-color="red,yellow,green" data-filter-flag="🇬🇭">🇬🇭 Ghana</li>
+				<li data-filter-wordcount="2" data-filter-letter="h" data-filter-continent="asia" data-filter-color="red,white" data-filter-flag="🇭🇰">🇭🇰 Hong Kong</li>
+				<li data-filter-wordcount="1" data-filter-letter="i" data-filter-continent="asia" data-filter-color="orange,white,green" data-filter-flag="🇮🇳">🇮🇳 India</li>
+				<li data-filter-wordcount="1" data-filter-letter="i" data-filter-continent="asia" data-filter-color="red,white" data-filter-flag="🇮🇩">🇮🇩 Indonesia</li>
+				<li data-filter-wordcount="1" data-filter-letter="i" data-filter-continent="europe" data-filter-color="green,white,orange" data-filter-flag="🇮🇪">🇮🇪 Ireland</li>
+				<li data-filter-wordcount="2" data-filter-letter="i" data-filter-continent="africa" data-filter-color="green,white,orange" data-filter-flag="🇨🇮">🇨🇮 Ivory Coast</li>
+				<li data-filter-wordcount="1" data-filter-letter="i" data-filter-continent="europe" data-filter-color="green,white,red" data-filter-flag="🇮🇹">🇮🇹 Italy</li>
+				<li data-filter-wordcount="1" data-filter-letter="j" data-filter-continent="asia" data-filter-color="red,white" data-filter-flag="🇯🇵">🇯🇵 Japan</li>
+				<li data-filter-wordcount="1" data-filter-letter="m" data-filter-continent="africa" data-filter-color="white,red,green" data-filter-flag="🇲🇬">🇲🇬 Madagascar</li>
+				<li data-filter-wordcount="1" data-filter-letter="m" data-filter-continent="north-america" data-filter-color="green,white,red" data-filter-flag="🇲🇽">🇲🇽 Mexico</li>
+				<li data-filter-wordcount="1" data-filter-letter="n" data-filter-continent="africa" data-filter-color="green,white" data-filter-flag="🇳🇬">🇳🇬 Nigeria</li>
+				<li data-filter-wordcount="1" data-filter-letter="p" data-filter-continent="asia" data-filter-color="red,white,green,black" data-filter-flag="🇵🇸">🇵🇸 Palestine</li>
+				<li data-filter-wordcount="1" data-filter-letter="p" data-filter-continent="south-america" data-filter-color="blue,red,white" data-filter-flag="🇵🇦">🇵🇦 Panama</li>
+				<li data-filter-wordcount="3" data-filter-letter="p" data-filter-continent="australia" data-filter-color="black,red,yellow,white" data-filter-flag="🇵🇬">🇵🇬 Papua New Guinea</li>
+				<li data-filter-wordcount="1" data-filter-letter="p" data-filter-continent="asia" data-filter-color="red,white,blue,yellow" data-filter-flag="🇵🇭">🇵🇭 Philippines</li>
+				<li data-filter-wordcount="1" data-filter-letter="p" data-filter-continent="europe" data-filter-color="green,red,yellow,white,blue" data-filter-flag="🇵🇹">🇵🇹 Portugal</li>
+				<li data-filter-wordcount="1" data-filter-letter="r" data-filter-continent="asia,europe" data-filter-color="red,white,blue" data-filter-flag="🇷🇺">🇷🇺 Russia</li>
+				<li data-filter-wordcount="2" data-filter-letter="s" data-filter-continent="asia" data-filter-color="red,white,black,blue" data-filter-flag="🇰🇷">🇰🇷 South Korea</li>
+				<li data-filter-wordcount="1" data-filter-letter="s" data-filter-continent="europe" data-filter-color="yellow,red" data-filter-flag="🇪🇸">🇪🇸 Spain</li>
+				<li data-filter-wordcount="1" data-filter-letter="t" data-filter-continent="asia" data-filter-color="red,blue,white" data-filter-flag="🇹🇼">🇹🇼 Taiwan</li>
+				<li data-filter-wordcount="2" data-filter-letter="u" data-filter-continent="europe" data-filter-color="red,blue,white" data-filter-flag="🇬🇧">🇬🇧 United Kingdom</li>
+				<li data-filter-wordcount="2" data-filter-letter="u" data-filter-continent="north-america" data-filter-color="red,white,blue" data-filter-flag="🇺🇸">🇺🇸 United States</li>
+				<li data-filter-wordcount="1" data-filter-letter="z" data-filter-continent="africa" data-filter-color="green,yellow,red,black,white" data-filter-flag="🇿🇼">🇿🇼 Zimbabwe</li>
 				<li data-filter-results-exclude data-filter-letter data-filter-continent data-filter-flag>Item excluded from count (for demo purposes)</li>
 			</ul>
 			<p>Sorry if your country is missing, I typed this out by hand 😅</p>

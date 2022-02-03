@@ -5,6 +5,7 @@ class FilterContainer extends HTMLElement {
       oninit: "oninit",
       valueDelimiter: "delimiter",
       leaveUrlAlone: "leave-url-alone",
+      mode: "filter-mode-",
       bind: "data-filter-key",
       results: "data-filter-results",
       resultsExclude: "data-filter-results-exclude",
@@ -72,6 +73,20 @@ class FilterContainer extends HTMLElement {
   
   getElementSelector(key) {
     return `data-filter-${key}`
+  }
+
+  getKeyFromAttributeName(attributeName) {
+    return attributeName.substr("data-filter-".length);
+  }
+
+  getFilterMode(key) {
+    if(!this.modes) {
+      this.modes = {};
+    }
+    if(!this.modes[key]) {
+      this.modes[key] = this.getAttribute(this.attrs.mode + key);
+    }
+    return this.modes[key];
   }
 
   bindEvents() {
@@ -164,7 +179,7 @@ class FilterContainer extends HTMLElement {
     this._applyMapForKey(key, map);
   }
 
-  _hasValue(needle, haystack = []) {
+  _hasValue(needle, haystack = [], mode = "any") {
     if(!haystack || !haystack.length || !Array.isArray(haystack)) {
       return false;
     }
@@ -172,7 +187,11 @@ class FilterContainer extends HTMLElement {
     if(!Array.isArray(needle)) {
       needle = [needle];
     }
+    if(mode === "all") {
+      return needle.sort().join("|||").includes(haystack.sort().join("|||"));
+    }
     for(let lookingFor of needle) {
+      // has any, return true
       if(haystack.some((val) => val === lookingFor)) {
         return true;
       }
@@ -186,7 +205,9 @@ class FilterContainer extends HTMLElement {
       return true;
     }
     let haystack = (element.getAttribute(attributeName) || "").split(this.valueDelimiter);
-    if(hasAttr && this._hasValue(haystack, values)) {
+    let key = this.getKeyFromAttributeName(attributeName);
+    let mode = this.getFilterMode(key);
+    if(hasAttr && this._hasValue(haystack, values, mode)) {
       return true;
     }
     return false;
