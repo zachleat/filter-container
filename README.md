@@ -37,6 +37,11 @@ Please see the demo for sample code. Use:
 
 ## Changelog
 
+### v3.0.3
+
+- Add support for AND-ing filters across multiple checkboxes. Previously only OR operations were supported.
+  - Use `filter-mode-KEY_NAME="all"` on `<filter-container>` to enable.
+
 ### v3.0.0
 
 - Added support for radio and checkbox inputs for filtering.
