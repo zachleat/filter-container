@@ -188,7 +188,13 @@ class FilterContainer extends HTMLElement {
       needle = [needle];
     }
     if(mode === "all") {
-      return needle.sort().join("|||").includes(haystack.sort().join("|||"));
+      let found = true;
+      for(let lookingFor of haystack) {
+        if(!needle.some((val) => val === lookingFor)) {
+          found = false;
+        }
+      }
+      return found;
     }
     for(let lookingFor of needle) {
       // has any, return true
