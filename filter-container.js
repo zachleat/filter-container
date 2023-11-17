@@ -1,33 +1,41 @@
 class FilterContainer extends HTMLElement {
-  constructor() {
-    super();
-    this.attrs = {
-      oninit: "oninit",
-      valueDelimiter: "delimiter",
-      leaveUrlAlone: "leave-url-alone",
-      mode: "filter-mode",
-      bind: "data-filter-key",
-      results: "data-filter-results",
-      resultsExclude: "data-filter-results-exclude",
-    };
-    this.classes = {
-      enhanced: "filter-container--js",
-      hidden: "filter--hide",
+  static attrs = {
+    oninit: "oninit",
+    valueDelimiter: "delimiter",
+    leaveUrlAlone: "leave-url-alone",
+    mode: "filter-mode",
+    bind: "data-filter-key",
+    results: "data-filter-results",
+    resultsExclude: "data-filter-results-exclude",
+  };
+
+  static register(tagName) {
+    if("customElements" in window) {
+      customElements.define(tagName || "filter-container", FilterContainer);
     }
   }
 
-  connectedCallback() {
-    this.init();
+  getCss(keys) {
+    return `${keys.map(key => `.filter-${key}--hide`).join(", ")} {
+  display: none;
+}`;
   }
 
-  init() {
+  connectedCallback() {
     this._lookedFor = {};
-
-    this.classList.add(this.classes.enhanced);
 
     this.bindEvents(this.formElements);
 
-    if(this.hasAttribute(this.attrs.oninit)) {
+    // even if this isn’t supported, folks can still add the CSS manually.
+    if(("replaceSync" in CSSStyleSheet.prototype) && !this._cssAdded) {
+      let sheet = new CSSStyleSheet();
+      let css = this.getCss(Object.keys(this.formElements));
+      sheet.replaceSync(css);
+      document.adoptedStyleSheets = [...document.adoptedStyleSheets, sheet];
+      this._cssAdded = true;
+    }
+
+    if(this.hasAttribute(FilterContainer.attrs.oninit)) {
       // This timeout was necessary to fix a bug with Google Chrome 93
       // Navigate to a filterable page, navigate away, use the back button to return
       // (connectedCallback would filter before the DOM was ready)
@@ -43,7 +51,7 @@ class FilterContainer extends HTMLElement {
 
   get valueDelimiter() {
     if(!this._valueDelimiter) {
-      this._valueDelimiter = this.getAttribute(this.attrs.valueDelimiter) || ",";
+      this._valueDelimiter = this.getAttribute(FilterContainer.attrs.valueDelimiter) || ",";
     }
 
     return this._valueDelimiter;
@@ -51,10 +59,10 @@ class FilterContainer extends HTMLElement {
 
   get formElements() {
     if(!this._lookedFor.formElements) {
-      let selector = `:scope [${this.attrs.bind}]`;
+      let selector = `:scope [${FilterContainer.attrs.bind}]`;
       let results = {};
       for(let node of this.querySelectorAll(selector)) {
-        let attr = node.getAttribute(this.attrs.bind);
+        let attr = node.getAttribute(FilterContainer.attrs.bind);
         if(!results[attr]) {
           results[attr] = [];
         }
@@ -70,7 +78,7 @@ class FilterContainer extends HTMLElement {
   getAllKeys() {
     return Object.keys(this.formElements);
   }
-  
+
   getElementSelector(key) {
     return `data-filter-${key}`
   }
@@ -84,11 +92,11 @@ class FilterContainer extends HTMLElement {
       this.modes = {};
     }
     if(!this.modes[key]) {
-      this.modes[key] = this.getAttribute(`${this.attrs.mode}-${key}`);
+      this.modes[key] = this.getAttribute(`${FilterContainer.attrs.mode}-${key}`);
     }
     if(!this.modes[key]) {
       if(!this.globalMode) {
-        this.globalMode = this.getAttribute(this.attrs.mode);
+        this.globalMode = this.getAttribute(FilterContainer.attrs.mode);
       }
       return this.globalMode;
     }
@@ -98,7 +106,7 @@ class FilterContainer extends HTMLElement {
 
   bindEvents() {
     this.addEventListener("input", e => {
-      let closest = e.target.closest(`[${this.attrs.bind}]`);
+      let closest = e.target.closest(`[${FilterContainer.attrs.bind}]`);
       if(closest) {
         this.applyFilterForElement(closest);
         requestAnimationFrame(() => {
@@ -125,7 +133,7 @@ class FilterContainer extends HTMLElement {
   }
 
   getFormElementKey(formElement) {
-    return formElement.getAttribute(this.attrs.bind);
+    return formElement.getAttribute(FilterContainer.attrs.bind);
   }
 
   _getMap(key) {
@@ -141,7 +149,7 @@ class FilterContainer extends HTMLElement {
       }
     }
 
-    if(!this.hasAttribute(this.attrs.leaveUrlAlone)) {
+    if(!this.hasAttribute(FilterContainer.attrs.leaveUrlAlone)) {
       this.updateUrl(key, values);
     }
 
@@ -235,7 +243,7 @@ class FilterContainer extends HTMLElement {
 
   get resultsCounter() {
     if(!this._lookedFor.resultsCounter) {
-      this._results = this.querySelector(`:scope [${this.attrs.results}]`);
+      this._results = this.querySelector(`:scope [${FilterContainer.attrs.results}]`);
       this._lookedFor.resultsCounter = true;
     }
 
@@ -265,12 +273,12 @@ class FilterContainer extends HTMLElement {
   }
 
   elementIsExcluded(element) {
-    return element.hasAttribute(this.attrs.resultsExclude);
+    return element.hasAttribute(FilterContainer.attrs.resultsExclude);
   }
 
   getLabels() {
     if(this.resultsCounter) {
-      let attrValue = this.resultsCounter.getAttribute(this.attrs.results);
+      let attrValue = this.resultsCounter.getAttribute(FilterContainer.attrs.results);
       let split = attrValue.split("/");
       if(split.length === 2) {
         return split;
@@ -345,6 +353,4 @@ class FilterContainer extends HTMLElement {
   }
 }
 
-if("customElements" in window) {
-  window.customElements.define("filter-container", FilterContainer);
-}
+FilterContainer.register();
