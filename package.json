@@ -1,13 +1,13 @@
 {
   "name": "@zachleat/filter-container",
-  "version": "3.0.4",
+  "version": "4.0.0",
   "description": "Filtering visible child elements based on form field values.",
   "main": "filter-container.js",
   "publishConfig": {
     "access": "public"
   },
   "scripts": {
-    "demo": "npx http-server ."
+    "start": "npx http-server ."
   },
   "repository": {
     "type": "git",
