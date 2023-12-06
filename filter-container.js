@@ -31,7 +31,7 @@ class FilterContainer extends HTMLElement {
       let sheet = new CSSStyleSheet();
       let css = this.getCss(Object.keys(this.formElements));
       sheet.replaceSync(css);
-      document.adoptedStyleSheets = [...document.adoptedStyleSheets, sheet];
+      document.adoptedStyleSheets.push(sheet);
       this._cssAdded = true;
     }
 
