@@ -85,7 +85,7 @@ class FilterContainer extends HTMLElement {
   }
 
   getKeyFromAttributeName(attributeName) {
-    return attributeName.substr("data-filter-".length);
+    return attributeName.substring("data-filter-".length);
   }
 
   getFilterMode(key) {
@@ -349,7 +349,7 @@ class FilterContainer extends HTMLElement {
   getUrlSearchValue() {
     let s = window.location.search;
     if(s.startsWith("?")) {
-      return s.substr(1);
+      return s.substring(1);
     }
     return s;
   }
