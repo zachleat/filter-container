@@ -41,6 +41,7 @@ Please see the demo for sample code. Use:
 ### v4.0.0
 
 - `filter-KEY_NAME--hide` CSS is now added automatically via the component—works alongside manually added CSS for proper progressive enhancement.
+- New setting `filter-match-mode` to control if string compares should match the whole string (`strict`, default) or substrings (`contains`).
 
 ### v3.0.4
 
