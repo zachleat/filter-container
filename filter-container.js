@@ -167,7 +167,7 @@ class FilterContainer extends HTMLElement {
       }
     }
 
-    if(!this.hasAttribute(FilterContainer.attrs.leaveUrlAlone)) {
+    if(!this.hasAttribute(FilterContainer.attrs.leaveUrlAlone) && !this.hasAttribute(FilterContainer.attrs.leaveUrlAlone + '-' + key)) {
       this.updateUrl(key, values);
     }
 

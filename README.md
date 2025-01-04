@@ -42,6 +42,7 @@ Please see the demo for sample code. Use:
 
 - `filter-KEY_NAME--hide` CSS is now added automatically via the component—works alongside manually added CSS for proper progressive enhancement.
 - New setting `filter-match-mode` to control if string compares should match the whole string (`strict`, default) or substrings (`contains`).
+- Filters can be excluded from URL manipulation by setting `leave-url-alone-[filter name]` on `<filter-container>`
 
 ### v3.0.4
 
