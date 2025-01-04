@@ -8,6 +8,8 @@ class FilterContainer extends HTMLElement {
     bind: "data-filter-key",
     results: "data-filter-results",
     resultsExclude: "data-filter-results-exclude",
+    filterGroupLabel: "data-filter-group-label",
+    filterGroupItem: "data-filter-group-item",
   };
 
   static register(tagName) {
@@ -17,7 +19,7 @@ class FilterContainer extends HTMLElement {
   }
 
   getCss(keys) {
-    return `${keys.map(key => `.filter-${key}--hide`).join(", ")} {
+    return `${keys.map(key => `.filter-${key}--hide`).join(", ")},.filter-group--hide {
   display: none;
 }`;
   }
@@ -188,12 +190,34 @@ class FilterContainer extends HTMLElement {
       return;
     }
 
+    let cls = `filter-${key}--hide`;
+    const filterGroupsToCheck = []
     for(let [element, isVisible] of map) {
-      let cls = `filter-${key}--hide`;
       if(isVisible) {
         element.classList.remove(cls);
       } else {
         element.classList.add(cls);
+      }
+
+      // Update filter group label visibility
+      if (element.hasAttribute(FilterContainer.attrs.filterGroupItem)) {
+        let filterGroupName = element.getAttribute(FilterContainer.attrs.filterGroupItem)
+        filterGroupsToCheck.push(filterGroupName);
+      }
+    }
+
+    for (const filterGroupName of filterGroupsToCheck) {
+      const groupLabelElements = this.querySelectorAll(`[${FilterContainer.attrs.filterGroupLabel}="${filterGroupName}"]`)
+      if (filterGroupName.length && groupLabelElements.length) {
+        const allGroupElements = this.querySelectorAll(`[${FilterContainer.attrs.filterGroupItem}="${filterGroupName}"]`)
+        const visibleElements = [...allGroupElements].filter(this.elementIsVisible)
+        for (const groupLabelEl of groupLabelElements) {
+          if (visibleElements.length) {
+            groupLabelEl.classList.remove('filter-group--hide');
+          } else {
+            groupLabelEl.classList.add('filter-group--hide');
+          }
+        }
       }
     }
   }

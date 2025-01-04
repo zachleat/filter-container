@@ -36,6 +36,17 @@ Please see the demo for sample code. Use:
 * Use `<filter-container delimiter=",">` if your content elements may have more than one filter value assigned (in this example delimited by a comma).
   * For example, Egypt is in both Africa and Asia: `<li data-filter-continent="africa,asia">Egypt</li>`
 
+* You can group filter result items using `data-filter-group-item` data attribute by setting the same group name. If you set `data-filter-group-label` to the same group name, the elenent will be hidden if no items from the group are visible.
+  * In the example below, filtering for "fruit" will remove the "Group B" headline as well:
+  ```html
+  <h2 data-filter-group-label="groupA">Group A</h2>
+  <span data-filter-group-item="groupA" data-filter-type="fruit">Apple</span>
+  <span data-filter-group-item="groupA" data-filter-type="fruit">Banana</span>
+  <h2 data-filter-group-label="groupB">Group B</h2>
+  <span data-filter-group-item="groupB" data-filter-type="vegetable">Carrot</span>
+  <span data-filter-group-item="groupB" data-filter-type="vegetable">Tomato</span>
+  ```
+
 ## Changelog
 
 ### v4.0.0
@@ -43,6 +54,7 @@ Please see the demo for sample code. Use:
 - `filter-KEY_NAME--hide` CSS is now added automatically via the component—works alongside manually added CSS for proper progressive enhancement.
 - New setting `filter-match-mode` to control if string compares should match the whole string (`strict`, default) or substrings (`contains`).
 - Filters can be excluded from URL manipulation by setting `leave-url-alone-[filter name]` on `<filter-container>`
+- New feature "filter groups" which allows hiding elements (e.g. labels) when all items of the same group are hidden.
 
 ### v3.0.4
 
