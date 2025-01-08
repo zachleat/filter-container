@@ -38,6 +38,10 @@ Please see the demo for sample code. Use:
 
 ## Changelog
 
+### v4.0.0
+
+- `filter-KEY_NAME--hide` CSS is now added automatically via the component—works alongside manually added CSS for proper progressive enhancement.
+
 ### v3.0.4
 
 - Add support for `filter-mode="all"` on `<filter-container>` to enable AND-ing filters for all multi-select form elements (checkboxes). Use `filter-mode-KEY_NAME="any"` to override back to the default.
