@@ -55,6 +55,7 @@ Please see the demo for sample code. Use:
 - New setting `filter-match-mode` to control if string compares should match the whole string (`strict`, default) or substrings (`contains`).
 - Filters can be excluded from URL manipulation by setting `leave-url-alone-[filter name]` on `<filter-container>`
 - New feature "filter groups" which allows hiding elements (e.g. labels) when all items of the same group are hidden.
+- New setting `filter-input-delimiter-[filter name]` that allows supplying a delimiter to split user input into multiple tokens that are matched instead of the full string.
 
 ### v3.0.4
 

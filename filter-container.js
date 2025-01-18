@@ -10,6 +10,7 @@ class FilterContainer extends HTMLElement {
     resultsExclude: "data-filter-results-exclude",
     filterGroupLabel: "data-filter-group-label",
     filterGroupItem: "data-filter-group-item",
+    inputDelimiter: "filter-input-delimiter",
   };
 
   static register(tagName) {
@@ -165,7 +166,15 @@ class FilterContainer extends HTMLElement {
           values.push(formElement.value);
         }
       } else {
-        values.push(formElement.value);
+        // split values by filter-input-delimiter- if set
+        let delimiter = this.getAttribute(FilterContainer.attrs.inputDelimiter + '-' + key);
+        if (delimiter && delimiter !== '') {
+          for (let splitValue of formElement.value.split(delimiter)) {
+            values.push(typeof splitValue === 'string' ? splitValue.trim() : splitValue);
+          }
+        } else {
+          values.push(formElement.value);
+        }
       }
     }
 
@@ -389,6 +398,12 @@ class FilterContainer extends HTMLElement {
     let params = new URLSearchParams(this.getUrlSearchValue());
     let keyParamsStr = params.getAll(key).sort().join(",");
     let valuesStr = values.slice().sort().join(",");
+
+    // respect multivalue delimiter if set
+    let delimiter = this.getAttribute(FilterContainer.attrs.inputDelimiter + '-' + key)
+    if (delimiter) {
+      values = [values.join(delimiter)]
+    }
 
     if(keyParamsStr !== valuesStr) {
       params.delete(key);
