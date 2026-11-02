@@ -114,6 +114,16 @@ class FilterContainer extends HTMLElement {
         });
       }
     }, false);
+
+    this.addEventListener("reset", () => {
+      // `reset` fires before the form values are restored.
+      setTimeout(() => {
+        for(let key in this.formElements) {
+          this.applyFilterForKey(key);
+        }
+        this.renderResultCount();
+      }, 0);
+    }, false);
   }
 
   initFormElements(formElements) {
